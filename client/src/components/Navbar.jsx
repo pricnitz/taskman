@@ -1,39 +1,28 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
-function Navbar() {
-  const navigate = useNavigate(); // ✅ use hook at the top
+const Navbar = () => {
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
-  return (
-    <nav className="w-full bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
-        
-        {/* Logo */}
-        <h1 
-          className="text-2xl font-bold text-blue-600 cursor-pointer"
-          onClick={() => navigate("/")} // click logo → home
-        >
-          MyLogo
-        </h1>
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
-        {/* Auth Buttons */}
-        <div className="flex space-x-4">
-          <button
-            className="border border-blue-600 text-blue-600 px-4 py-2 rounded-xl hover:bg-blue-50 transition-colors"
-            onClick={() => navigate("/login")} // ✅ navigate to /login
-          >
-            Login
-          </button>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors"
-            onClick={() => navigate("/register")} // ✅ navigate to /register
-          >
-            Register
-          </button>
-        </div>
-      </div>
-    </nav>
-  );
-}
+    return (
+        <nav className="bg-gray-800 p-4 text-white">
+            <div className="container mx-auto flex justify-between items-center">
+                <Link to="/dashboard" className="text-xl font-bold">Task Manager</Link>
+                <div>
+                    {user && (
+                        <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</button>
+                    )}
+                </div>
+            </div>
+        </nav>
+    );
+};
 
 export default Navbar;
